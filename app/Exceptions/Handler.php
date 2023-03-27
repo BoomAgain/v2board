@@ -76,4 +76,18 @@ class Handler extends ExceptionHandler
             'message' => $this->isHttpException($e) ? $e->getMessage() : __("Uh-oh, we've had some problems, we're working on it."),
         ];
     }
+
+    // 找到你的项目所配置的异常处理类，默认为
+    // app/Exceptions/Handler.php
+    public function register()
+    {
+       $this->reportable(function (Throwable $e) {
+            if ($e instanceof \hg\apidoc\exception\HttpException) {
+                return abort(
+                    $e->getStatusCode(),
+                    $e->getMessage(),
+            );
+        }
+    });
+}
 }
